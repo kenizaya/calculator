@@ -23,16 +23,32 @@ function operate(o, a, b) {
 
 function display() {
     const keys = document.querySelectorAll(".key");
-    const displayDiv = document.querySelector(".display");
+    const equation = document.querySelector(".equation");
+    const answer = document.querySelector(".answer");
+    let num;
+    let op;
+    let opDisabled = false;
 
     keys.forEach(key => key.addEventListener("click", () => {
         if (key.classList.contains("clear")) {
-            displayDiv.textContent = 0;
+            answer.textContent = 0;
         } else if (key.classList.contains("operator")) {
-            displayDiv.textContent += key.textContent;
-            key.disabled = true;
+            num = answer.textContent;
+            temp = num;
+            op = key.textContent;
+            opDisabled = true;
+            equation.textContent = num + " " + op;
+
+        } else if (key.classList.contains("equals")) {
+            equation.textContent += ` ${answer.textContent} =`;
+            answer.textContent = operate(op, num, answer.textContent);
+            num = answer.textContent;
         } else {
-            displayDiv.textContent += key.textContent;
+            if (answer.textContent === "0" || opDisabled) {
+                answer.textContent = key.textContent;
+                opDisabled = false;
+            } else
+                answer.textContent += key.textContent;
         }
     }));
 

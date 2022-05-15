@@ -21,4 +21,21 @@ function operate(o, a, b) {
     if (o === "/") return divide(a, b);
 }
 
-console.log(operate("+", 5, 7));
+function display() {
+    const keys = document.querySelectorAll(".key");
+    const displayDiv = document.querySelector(".display");
+
+    keys.forEach(key => key.addEventListener("click", () => {
+        if (key.classList.contains("clear")) {
+            displayDiv.textContent = 0;
+        } else if (key.classList.contains("operator")) {
+            displayDiv.textContent += key.textContent;
+            key.disabled = true;
+        } else {
+            displayDiv.textContent += key.textContent;
+        }
+    }));
+
+}
+
+display();

@@ -1,17 +1,17 @@
 function add(a, b) {
-    return a + b;
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number(a) / Number(b);
 }
 
 function operate(o, a, b) {
@@ -25,28 +25,38 @@ function display() {
     const keys = document.querySelectorAll(".key");
     const equation = document.querySelector(".equation");
     const answer = document.querySelector(".answer");
+    const equals = document.querySelector(".equals");
+    let opKey;
     let num;
     let op;
-    let opDisabled = false;
+    let answerChanged = false;
 
     keys.forEach(key => key.addEventListener("click", () => {
         if (key.classList.contains("clear")) {
+            equation.textContent = "";
             answer.textContent = 0;
         } else if (key.classList.contains("operator")) {
+            answerChanged = true;
+            opKey = key;
             num = answer.textContent;
-            temp = num;
             op = key.textContent;
-            opDisabled = true;
             equation.textContent = num + " " + op;
-
-        } else if (key.classList.contains("equals")) {
-            equation.textContent += ` ${answer.textContent} =`;
+            opKey.disabled = true;
+            equals.disabled = false;
+            
+        } else if (key.classList.contains("equals") && answerChanged) {
+            equation.textContent = `${num} ${op} ${answer.textContent} =`;
             answer.textContent = operate(op, num, answer.textContent);
             num = answer.textContent;
+            equals.disabled = true;
+
         } else {
-            if (answer.textContent === "0" || opDisabled) {
+            if (answer.textContent === "0" || answerChanged) {
                 answer.textContent = key.textContent;
-                opDisabled = false;
+                opKey.disabled = false;
+                // if (answerChanged) {
+                //     answerChanged = false;
+                // }
             } else
                 answer.textContent += key.textContent;
         }
